@@ -1,0 +1,6 @@
+{
+  "nested": {
+    "test": "NL - Nested test!"
+  },
+  "test": "Dutch test!"
+}

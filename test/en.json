@@ -1,0 +1,6 @@
+{
+  "nested": {
+    "test": "EN - Nested test!"
+  },
+  "test": "English test!"
+}
