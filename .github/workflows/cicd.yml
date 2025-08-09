@@ -1,3 +1,5 @@
+name: Build & Release CLI
+
 on:
   push:
     tags:
@@ -25,9 +27,8 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            target/release/PROJECT_NAME_amd64
+            target/release/translate-tool_amd64
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

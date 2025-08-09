@@ -23,7 +23,7 @@ pub fn add_command(args: CommandArgs, key: Option<String>) -> Result<(), Command
     let key = if key.is_some() {
         key.unwrap()
     } else {
-        cli::prompt_translation_key(translation_keys.clone(), true)
+        cli::prompt_translation_key(translation_keys.clone(), true, "Translation key to add:")
             .map_err(|e| CommandError::Generic(e.to_string()))?
     };
 

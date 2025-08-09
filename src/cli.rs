@@ -96,10 +96,14 @@ impl StringValidator for TranslationKeyValidator {
 pub fn prompt_translation_key(
     translation_keys: Vec<String>,
     invert_validator: bool,
+    prompt_text: &str,
 ) -> Result<String, String> {
-    let key = Text::new("Translation key to update:")
+    let key = Text::new(prompt_text)
         .with_autocomplete(UpdateAutocomplete::new(translation_keys.clone()))
-        .with_validator(TranslationKeyValidator::new(translation_keys, invert_validator))
+        .with_validator(TranslationKeyValidator::new(
+            translation_keys,
+            invert_validator,
+        ))
         .prompt();
 
     if key.is_err() {

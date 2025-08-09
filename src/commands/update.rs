@@ -23,8 +23,12 @@ pub fn update_command(args: CommandArgs, key: Option<String>) -> Result<(), Comm
     let key = if key.is_some() {
         key.unwrap()
     } else {
-        cli::prompt_translation_key(translation_keys.clone(), false)
-            .map_err(|e| CommandError::Generic(e.to_string()))?
+        cli::prompt_translation_key(
+            translation_keys.clone(),
+            false,
+            "Translation key to update:",
+        )
+        .map_err(|e| CommandError::Generic(e.to_string()))?
     };
 
     for file_path in &translation_files {
