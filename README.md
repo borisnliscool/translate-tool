@@ -1,12 +1,35 @@
-## TODO
+# Translate Tool
 
-- [ ] Read the directory for translation files
-- [ ] Find differences between the files
-- [ ] CLI
-    - [ ] add new translations
-    - [ ] update translations
-    - [ ] autocomplete for translations
-    - [ ] easy navigation through categories
-- [ ] tt.config.json
-    - [ ] commands to run after writing to file (formatting)
-    - [ ] default locale
+Simple for managing json-based translation files.
+
+```shell
+Usage: translate-tool [OPTIONS] [COMMAND]
+
+Commands:
+  add       Add a translation to all locale files
+  update    Update a translation in all locale files
+  validate  Validate all keys are present
+  help      Print this message or the help of the given subcommand(s)
+
+Options:
+  -c, --config <CONFIG>  [default: tt.config.json]
+  -h, --help             Print help
+  -V, --version          Print version
+```
+
+### Configuration
+
+Configuration is done via a `tt.config.json` file. Example:
+
+```json5
+{
+  // defaults to an empty list
+  "post_write_commands": [
+    "bun format"
+  ],
+  // defaults to 'en'
+  "default_locale": "en",
+  // defaults to 'translations'
+  "translations_directory": "test",
+}
+```
