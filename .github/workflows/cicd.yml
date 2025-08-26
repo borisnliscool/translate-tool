@@ -8,8 +8,8 @@ on:
       - main
 
 jobs:
-  cicd:
-    name: Build CLI
+  rust-build:
+    name: Build Rust CLI
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -33,3 +33,38 @@ jobs:
             target/release/translate-tool_amd64
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  docker-build:
+    name: Build Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set Docker tag
+        id: set_tag
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+              echo "tag=ghcr.io/borisnliscool/translate-tool:latest" >> $GITHUB_ENV
+          else
+              echo "tag=ghcr.io/borisnliscool/translate-tool:${GITHUB_REF##*/}" >> $GITHUB_ENV
+          fi
+        shell: bash
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ env.tag }}

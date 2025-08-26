@@ -1,6 +1,6 @@
 # Translate Tool
 
-Simple for managing json-based translation files.
+Simple tool for managing json-based translation files.
 
 ```shell
 Usage: translate-tool [OPTIONS] [COMMAND]
