@@ -17,6 +17,7 @@ WORKDIR /
 COPY --from=builder /app/target/release/translate-tool /translate-tool
 RUN chmod +x /translate-tool
 
+RUN mkdir -p /locales
 RUN echo '{"translations_directory": "locales"}' > tt.config.json
 
 LABEL org.opencontainers.image.source=https://github.com/borisnliscool/translate-tool

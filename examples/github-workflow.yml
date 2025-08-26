@@ -1,0 +1,15 @@
+jobs:
+  lint-translations:
+    name: Lint translations
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/borisnliscool/translate-tool:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare locales
+        run: cp -r /static/i18n/* /locales/
+
+      - name: Validate translations
+        run: /translate-tool validate

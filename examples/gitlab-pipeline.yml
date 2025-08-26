@@ -1,0 +1,9 @@
+stages:
+  - lint
+
+lint-translations:
+  stage: lint
+  image: ghcr.io/borisnliscool/translate-tool:latest
+  script:
+    - cp -r static/i18n/* /locales/
+    - /translate-tool validate

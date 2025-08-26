@@ -1,0 +1,10 @@
+pipelines:
+  default:
+    - step:
+        name: Lint translations
+        image: ghcr.io/borisnliscool/translate-tool:latest
+        services:
+          - docker
+        script:
+          - cp -r static/i18n/* /locales/
+          - /translate-tool validate
