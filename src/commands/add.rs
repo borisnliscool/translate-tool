@@ -54,6 +54,11 @@ pub fn add_command(args: CommandArgs, key: Option<String>) -> Result<(), Command
         }
 
         let initial_value = initial_value.unwrap();
+        if initial_value.is_empty() {
+            // skip writing empty values
+            continue;
+        }
+
         let translation_value =
             parser::update_translation_key(translation_value, key.clone(), initial_value)
                 .map_err(|e| CommandError::Generic(e.to_string()))?;

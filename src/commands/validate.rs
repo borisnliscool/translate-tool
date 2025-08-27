@@ -1,9 +1,10 @@
+use serde_json::Value;
 use crate::cli::CommandArgs;
 use crate::commands::CommandError;
 use crate::parser::ObjectKeyOption;
 use crate::{files, parser};
 
-pub fn validate_command(args: CommandArgs) -> Result<(), CommandError> {
+pub fn validate_command(args: CommandArgs, fail_on_empty: bool) -> Result<(), CommandError> {
     let (default_locale_path, translation_files) =
         files::get_translation_files(args.target_path.clone())
             .map_err(|e| CommandError::Generic(e.to_string()))?;
@@ -26,7 +27,7 @@ pub fn validate_command(args: CommandArgs) -> Result<(), CommandError> {
             .map_err(|e| CommandError::Generic(e.to_string()))?;
 
         let translation_keys = parser::get_translation_keys(
-            translation_value,
+            translation_value.clone(),
             "".to_string(),
             ObjectKeyOption::ExcludeObjectKeys,
         )
@@ -36,6 +37,11 @@ pub fn validate_command(args: CommandArgs) -> Result<(), CommandError> {
             if !translation_keys.contains(&key) {
                 issues.push(format!("{} is missing key '{}'", file_name, key));
             }
+        }
+
+        if fail_on_empty {
+            let empty_values = get_empty_values(file_name, &translation_value, "".to_string());
+            issues.extend(empty_values.clone());
         }
     }
     
@@ -53,4 +59,26 @@ pub fn validate_command(args: CommandArgs) -> Result<(), CommandError> {
     println!("All keys present!");
 
     Ok(())
+}
+
+fn get_empty_values(file_name: String, value: &Value, key: String) -> Vec<String> {
+    let mut issues: Vec<String> = Vec::new();
+
+    match value {
+        Value::String(val) => {
+            if val.is_empty() {
+                issues.push(format!("{} has an empty value '{}'", file_name, key));
+            }
+        },
+        Value::Object(val) => {
+            for (key, value) in val {
+                issues.extend(
+                    get_empty_values(file_name.clone(), value, key.to_owned())
+                );
+            }
+        },
+        _ => ()
+    }
+
+    issues
 }

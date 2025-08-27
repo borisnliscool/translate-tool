@@ -67,7 +67,7 @@ fn load_config(config_path: Option<String>) -> Result<Config, String> {
 
 pub fn get_config(config_path: Option<String>) -> Config {
     CONFIG
-        .get_or_init(|| load_config(config_path).expect("Failed to load config"))
+        .get_or_init(|| load_config(config_path).unwrap_or_default())
         .to_owned()
 }
 

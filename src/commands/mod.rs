@@ -1,3 +1,4 @@
+use clap::ArgAction;
 use crate::cli::CommandArgs;
 use clap::Subcommand;
 use std::fmt::Display;
@@ -13,7 +14,10 @@ pub enum Commands {
     #[clap(about = "Update a translation in all locale files")]
     Update { key: Option<String> },
     #[clap(about = "Validate all keys are present")]
-    Validate {},
+    Validate {
+        #[arg(long, action=ArgAction::SetTrue)]
+        fail_on_empty: Option<bool>,
+    },
 }
 
 pub enum CommandError {
@@ -32,6 +36,8 @@ pub fn handle_command(command: Commands, args: CommandArgs) -> Result<(), Comman
     match command {
         Commands::Update { key } => update::update_command(args, key),
         Commands::Add { key } => add::add_command(args, key),
-        Commands::Validate {} => validate::validate_command(args),
+        Commands::Validate { fail_on_empty } => {
+            validate::validate_command(args, fail_on_empty.unwrap_or(false))
+        }
     }
 }
