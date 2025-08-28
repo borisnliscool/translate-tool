@@ -11,24 +11,26 @@ use std::process;
 
 fn main() {
     let args = Cli::parse();
-    let config = config::get_config(args.config.clone().and_then(|x| Some(x.to_string())));
+
+    let config = config::get_config(
+        args.config.clone().and_then(|x| Some(x.to_string())),
+        args.translations_dir
+            .clone()
+            .and_then(|x| Some(x.to_string())),
+    );
 
     let cwd = std::env::current_dir().unwrap();
     let target_path = Path::new(&cwd).join(config.translations_directory);
 
     if !target_path.exists() {
         panic!(
-            "Target directory {:#?} does not exist. You should probably specify a target path by using '--target <path>'",
+            "Translations directory {:#?} does not exist. You should probably specify a translations directory by using '--translations-dir <path>' (or `-t <path>` for short)",
             target_path
         );
     }
 
-    if !args.command.is_some() {
-        return;
-    }
-
     let result = commands::handle_command(
-        args.clone().command.unwrap(),
+        args.clone().command,
         CommandArgs {
             target_path,
             cli_args: args,

@@ -65,9 +65,17 @@ fn load_config(config_path: Option<String>) -> Result<Config, String> {
     Ok(deserialized.unwrap())
 }
 
-pub fn get_config(config_path: Option<String>) -> Config {
+pub fn get_config(config_path: Option<String>, translations_dir: Option<String>) -> Config {
     CONFIG
-        .get_or_init(|| load_config(config_path).unwrap_or_default())
+        .get_or_init(|| {
+            load_config(config_path).unwrap_or_else(|_| {
+                let mut config: Config = Default::default();
+                if let Some(translations_dir) = translations_dir {
+                    config.translations_directory = translations_dir;
+                }
+                config
+            })
+        })
         .to_owned()
 }
 

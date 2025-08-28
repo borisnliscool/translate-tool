@@ -13,8 +13,11 @@ pub struct Cli {
     #[clap(short, long, default_value = "tt.config.json")]
     pub config: Option<Utf8PathBuf>,
 
+    #[clap(short, long)]
+    pub translations_dir: Option<Utf8PathBuf>,
+
     #[command(subcommand)]
-    pub command: Option<Commands>,
+    pub command: Commands,
 }
 
 pub struct CommandArgs {
