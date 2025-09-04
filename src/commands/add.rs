@@ -6,7 +6,7 @@ use inquire::Text;
 
 pub fn add_command(args: CommandArgs, key: Option<String>) -> Result<(), CommandError> {
     let (default_locale_path, translation_files) =
-        files::get_translation_files(args.target_path.clone())
+        files::get_translation_files(args.translations_directory.clone())
             .map_err(|e| CommandError::Generic(e.to_string()))?;
 
     let translation_value = parser::get_parsed_translation_file(default_locale_path.into())

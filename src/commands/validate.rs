@@ -6,7 +6,7 @@ use crate::{files, parser};
 
 pub fn validate_command(args: CommandArgs, fail_on_empty: bool) -> Result<(), CommandError> {
     let (default_locale_path, translation_files) =
-        files::get_translation_files(args.target_path.clone())
+        files::get_translation_files(args.translations_directory.clone())
             .map_err(|e| CommandError::Generic(e.to_string()))?;
 
     let default_translation_value = parser::get_parsed_translation_file(default_locale_path.into())

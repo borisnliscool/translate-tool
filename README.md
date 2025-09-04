@@ -12,7 +12,7 @@ Commands:
   help      Print this message or the help of the given subcommand(s)
 
 Options:
-  -c, --config <CONFIG>                      [default: tt.config.json]
+  -c, --config <CONFIG>                      
   -t, --translations-dir <TRANSLATIONS_DIR>  
   -h, --help                                 Print help
   -V, --version                              Print version
@@ -31,9 +31,10 @@ Configuration is done via a `tt.config.json` file. Example:
   // defaults to 'en'
   "default_locale": "en",
   // defaults to 'translations'
-  "translations_directory": "test",
+  "translations_directory": "test/translations",
 }
 ```
 
-You can also skip using the file, and only provide the `--translations-dir` (or `-t`) flag to specify the translations'
-directory. The default locale will be set to `en` and there will be no post write commands.
+You can also skip using the file, and optionally provide the `--translations-dir` (or `-t`) flag to specify the
+directory. The default is `<cwd>/translations`. The default locale will be set to `en` and there will be no post write
+commands.

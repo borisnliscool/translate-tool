@@ -10,7 +10,7 @@ use std::path::PathBuf;
 #[command(author, version, about, long_about = None)]
 #[command(propagate_version = true, arg_required_else_help = true)]
 pub struct Cli {
-    #[clap(short, long, default_value = "tt.config.json")]
+    #[clap(short, long)]
     pub config: Option<Utf8PathBuf>,
 
     #[clap(short, long)]
@@ -22,7 +22,7 @@ pub struct Cli {
 
 pub struct CommandArgs {
     pub cli_args: Cli,
-    pub target_path: PathBuf,
+    pub translations_directory: PathBuf,
 }
 
 #[derive(Debug, Clone, Default)]

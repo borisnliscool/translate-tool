@@ -5,5 +5,7 @@ lint-translations:
   stage: lint
   image: ghcr.io/borisnliscool/translate-tool:latest
   script:
-    - cp -r static/i18n/* /locales/
-    - /translate-tool validate
+    # remove this if you do not have a configuration file
+    - cp tt.config.json /tt.config.json
+    - cp -r static/i18n/* /translations/
+    - translate-tool validate

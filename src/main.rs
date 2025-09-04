@@ -13,26 +13,53 @@ fn main() {
     let args = Cli::parse();
 
     let config = config::get_config(
-        args.config.clone().and_then(|x| Some(x.to_string())),
+        args.config
+            .clone()
+            .and_then(|x| Some(x.to_string()))
+            .or_else(|| Some("tt.config.json".to_string())),
         args.translations_dir
             .clone()
             .and_then(|x| Some(x.to_string())),
     );
 
-    let cwd = std::env::current_dir().unwrap();
-    let target_path = Path::new(&cwd).join(config.translations_directory);
+    // If config flag is set, we use that as the parent directory,
+    // else, we use the current working directory.
+    let parent = args
+        .config
+        .clone()
+        .and_then(|x| {
+            if !x.exists() {
+                panic!("'{}' does not exist", x)
+            }
+            if x.parent().is_none() {
+                panic!("'{}' does not have a parent", x)
+            }
 
-    if !target_path.exists() {
+            Some(
+                x.as_std_path()
+                    .parent()
+                    .unwrap()
+                    .canonicalize()
+                    .unwrap()
+                    .to_owned(),
+            )
+        })
+        .unwrap_or(std::env::current_dir().unwrap());
+    
+    let translations_directory = Path::new(&parent).join(config.translations_directory);
+
+    if !translations_directory.exists() {
         panic!(
-            "Translations directory {:#?} does not exist. You should probably specify a translations directory by using '--translations-dir <path>' (or `-t <path>` for short)",
-            target_path
+            "Translations directory {:#?} does not exist. You should probably specify a \
+            translations directory by using '--translations-dir <path>' (or `-t <path>` for short)",
+            translations_directory
         );
     }
 
     let result = commands::handle_command(
         args.clone().command,
         CommandArgs {
-            target_path,
+            translations_directory,
             cli_args: args,
         },
     );

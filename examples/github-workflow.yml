@@ -8,8 +8,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Prepare locales
-        run: cp -r /static/i18n/* /locales/
+      - name: Prepare translations
+        run: |
+          # remove this if you do not have a configuration file
+          cp tt.config.json /tt.config.json
+          cp -r /static/i18n/* /translations/
 
       - name: Validate translations
-        run: /translate-tool validate
+        run: translate-tool validate
