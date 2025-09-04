@@ -38,3 +38,18 @@ Configuration is done via a `tt.config.json` file. Example:
 You can also skip using the file, and optionally provide the `--translations-dir` (or `-t`) flag to specify the
 directory. The default is `<cwd>/translations`. The default locale will be set to `en` and there will be no post write
 commands.
+
+## Running via docker
+
+You can run translate-tool via the docker image. The image is available
+on [ghcr.io/borisnliscool/translate-tool](https://github.com/borisnliscool/translate-tool/pkgs/container/translate-tool).
+Remember to change `./translations` to the path of your translations.
+If you want to use a configuration file, you can mount it as a volume as well, but this is not required.
+
+```shell
+docker run \
+  -v ./tt.config.json:/tt.config.json \
+  -v ./translations:/translations \
+  ghcr.io/borisnliscool/translate-tool:latest \
+  translate-tool validate
+```
