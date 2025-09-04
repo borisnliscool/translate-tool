@@ -6,6 +6,7 @@ pipelines:
         services:
           - docker
         script:
+          - mkdir /translations
           # remove this if you do not have a configuration file
           - cp tt.config.json /tt.config.json
           - cp -r static/i18n/* /translations/
