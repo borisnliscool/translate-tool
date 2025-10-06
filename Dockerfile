@@ -16,5 +16,6 @@ WORKDIR /
 
 COPY --from=builder /app/target/release/translate-tool /bin/translate-tool
 RUN chmod +x /bin/translate-tool
+RUN alias tt=translate-tool
 
 LABEL org.opencontainers.image.source=https://github.com/borisnliscool/translate-tool
